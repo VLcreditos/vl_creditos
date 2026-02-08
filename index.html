@@ -1,141 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>VL Créditos | Recargas com Desconto</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body{
   margin:0;
   font-family:'Segoe UI', Arial, sans-serif;
-  background:linear-gradient(180deg,#111827,#1f2937);
-  color:#f9fafb;
-}
-
-/* CONTAINER */
-.container{
-  max-width:420px;
-  margin:20px auto;
-  background:#1f2937;
-  border-radius:22px;
-  padding:22px;
-  box-shadow:0 20px 45px rgba(0,0,0,.45);
-}
-
-/* LOGO */
-.logo{
-  display:block;
-  margin:5px auto 12px;
-  max-width:140px;
-}
-
-/* TITULOS */
-h1{
-  text-align:center;
-  font-size:22px;
-  margin:10px 0 5px;
-  font-weight:700;
-}
-.sub{
-  text-align:center;
-  font-size:14px;
-  color:#d1d5db;
-}
-
-/* CARD */
-.card{
-  background:#374151;
-  border-radius:18px;
-  padding:16px;
-  margin-top:20px;
-}
-
-/* LABELS */
-label{
-  font-size:13px;
-  font-weight:600;
-  display:block;
-  margin-top:14px;
+  background:linear-gradient(180deg,#0b1220,#0f172a);
   color:#e5e7eb;
 }
 
-/* INPUTS */
+.container{
+  max-width:420px;
+  margin:20px auto;
+  background:#111827;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 25px 60px rgba(0,0,0,.7);
+}
+
+.logo{
+  display:block;
+  margin:10px auto 15px;
+  max-width:140px;
+}
+
+h1{
+  text-align:center;
+  font-size:22px;
+  margin-bottom:5px;
+}
+
+.sub{
+  text-align:center;
+  font-size:14px;
+  color:#9ca3af;
+}
+
+.card{
+  background:#1f2937;
+  border-radius:16px;
+  padding:16px;
+  margin-top:18px;
+}
+
+label{
+  font-size:14px;
+  font-weight:600;
+  margin-top:14px;
+  display:block;
+}
+
 select,input{
   width:100%;
   padding:14px;
   margin-top:6px;
-  border-radius:14px;
-  border:1px solid #4b5563;
-  font-size:15px;
-  background:#111827;
+  border-radius:12px;
+  border:1px solid #374151;
+  background:#020617;
   color:#f9fafb;
+  font-size:16px;
 }
 
-select:focus,input:focus{
-  outline:none;
-  border-color:#2563eb;
-}
-
-/* INFO */
 .info{
   margin-top:16px;
-  background:#1f2937;
+  background:#020617;
   border-left:4px solid #22c55e;
   padding:12px;
-  border-radius:12px;
+  border-radius:10px;
   text-align:center;
-  font-size:14px;
 }
-.info b{color:#22c55e;}
 
-/* BOTÃO */
+.info b{ color:#22c55e; }
+
 .btn{
   width:100%;
   margin-top:18px;
   padding:16px;
-  font-size:16px;
-  font-weight:700;
+  font-size:18px;
+  font-weight:bold;
   border:none;
-  border-radius:18px;
-  background:linear-gradient(135deg,#2563eb,#3b82f6);
-  color:#fff;
-  cursor:pointer;
-  transition:.3s;
-}
-.btn:hover{
-  transform:translateY(-1px);
-  opacity:.95;
+  border-radius:14px;
+  background:linear-gradient(90deg,#22c55e,#16a34a);
+  color:#020617;
 }
 
-/* AVISO */
 .aviso{
   margin-top:14px;
-  background:#fef3c7;
-  color:#111827;
-  border-radius:14px;
+  background:#020617;
+  border:1px solid #374151;
+  border-radius:12px;
   padding:12px;
   font-size:13px;
   text-align:center;
+  color:#d1d5db;
 }
 
-/* PIX */
 .pix-box{
   margin-top:20px;
-  background:#1f2937;
+  background:#020617;
   border:2px dashed #22c55e;
-  border-radius:18px;
+  border-radius:16px;
   padding:16px;
   text-align:center;
 }
+
 .pix{
-  font-size:17px;
-  font-weight:700;
+  font-size:18px;
+  font-weight:bold;
   color:#22c55e;
   margin:10px 0;
   word-break:break-all;
 }
 
-.hidden{display:none;}
+.hidden{ display:none; }
 
-/* FOOTER */
 .footer{
   text-align:center;
-  font-size:11px;
-  color:#d1d5db;
-  margin-top:18px;
+  font-size:12px;
+  color:#9ca3af;
+  margin-top:20px;
 }
-  </style>
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- COLOQUE SUA LOGO AQUI -->
+  <img src="logo.png" class="logo" alt="VL Créditos">
+
+  <h1>📲 Recargas com Desconto</h1>
+  <p class="sub">Pagamento via Pix • Atendimento rápido</p>
+
+  <div class="card">
+
+    <label>Operadora</label>
+    <select id="operadora" onchange="atualizarValores()">
+      <option value="">Selecione</option>
+      <option value="Claro">Claro</option>
+      <option value="TIM">TIM</option>
+    </select>
+
+    <label>Número do celular</label>
+    <input type="tel" id="numero" placeholder="DDD + número">
+
+    <label>Valor da recarga</label>
+    <select id="valor" onchange="mostrarValor()">
+      <option value="">Selecione a operadora primeiro</option>
+    </select>
+
+    <div class="info" id="info">
+      Escolha a recarga para ver os valores
+    </div>
+
+    <button class="btn" onclick="mostrarPix()">Continuar para pagamento</button>
+
+    <div class="aviso">
+      ⏱️ Recarga em até <b>24 horas</b><br>
+      🔒 Caso não seja feita, o valor será <b>devolvido</b>
+    </div>
+
+  </div>
+
+  <div id="pix" class="hidden">
+    <div class="pix-box">
+      <h3>💸 Pagamento via PIX</h3>
+      <p>Chave PIX (CNPJ)</p>
+      <div class="pix">58.306.326/0001-21</div>
+      <p>Após pagar, envie o comprovante</p>
+    </div>
+
+    <button class="btn" onclick="enviarWhats()">Enviar comprovante no WhatsApp</button>
+  </div>
+
+  <div class="footer">
+    © 2026 VL Créditos • Ambiente seguro
+  </div>
+
+</div>
+
+<script>
+const tabela = {
+  Claro: {
+    20:16, 25:19, 30:21, 40:24, 50:27, 100:65
+  },
+  TIM: {
+    15:12, 20:16, 30:21, 40:26, 50:29, 60:35, 100:65
+  }
+};
+
+let valorPago = 0;
+
+function atualizarValores(){
+  valor.innerHTML = "<option value=''>Selecione</option>";
+  info.innerHTML = "Escolha a recarga para ver os valores";
+
+  if(!operadora.value) return;
+
+  for(let v in tabela[operadora.value]){
+    valor.innerHTML += `<option value="${v}">R$ ${v}</option>`;
+  }
+}
+
+function mostrarValor(){
+  if(!valor.value) return;
+  valorPago = tabela[operadora.value][valor.value];
+
+  info.innerHTML = `
+    Você recebe <b>R$ ${valor.value}</b><br>
+    Você paga <b>R$ ${valorPago}</b>
+  `;
+}
+
+function mostrarPix(){
+  if(!operadora.value || !numero.value || !valor.value){
+    alert("Preencha todos os campos");
+    return;
+  }
+  document.getElementById("pix").classList.remove("hidden");
+}
+
+function enviarWhats(){
+  const msg =
+`📲 PEDIDO DE RECARGA
+Operadora: ${operadora.value}
+Número: ${numero.value}
+Recarga: R$ ${valor.value}
+Valor pago: R$ ${valorPago}
+PIX: 58.306.326/0001-21`;
+
+  window.open(
+    "https://wa.me/5571984778390?text=" + encodeURIComponent(msg),
+    "_blank"
+  );
+}
+</script>
+
+</body>
+      </html>
