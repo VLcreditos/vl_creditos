@@ -1,234 +1,141 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recargas com Desconto</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
-:root{
-  --bg:#0b1220;
-  --card:#111827;
-  --input:#020617;
-  --border:#1f2937;
-  --primary:#2563eb;
-  --secondary:#22c55e;
-  --text:#e5e7eb;
-  --muted:#9ca3af;
-}
-
-*{
-  box-sizing:border-box;
-  font-family:'Inter',sans-serif;
-}
-
 body{
   margin:0;
-  background:var(--bg);
-  display:flex;
-  justify-content:center;
-  padding:20px 12px;
+  font-family:'Segoe UI', Arial, sans-serif;
+  background:linear-gradient(180deg,#111827,#1f2937);
+  color:#f9fafb;
 }
 
-/* APP */
-.app{
-  background:var(--card);
+/* CONTAINER */
+.container{
   max-width:420px;
-  width:100%;
+  margin:20px auto;
+  background:#1f2937;
   border-radius:22px;
   padding:22px;
-  box-shadow:0 20px 50px rgba(0,0,0,.7);
-  animation:fade .5s ease;
+  box-shadow:0 20px 45px rgba(0,0,0,.45);
 }
 
-@keyframes fade{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-/* HEADER */
-.header{
-  text-align:center;
-  margin-bottom:20px;
-}
-
-.header img{
-  max-width:120px;
-  margin-bottom:10px;
-}
-
-.header h1{
-  font-size:20px;
-  margin:0;
-  color:var(--text);
-}
-
-/* FORM */
-label{
+/* LOGO */
+.logo{
   display:block;
-  margin:14px 0 6px;
+  margin:5px auto 12px;
+  max-width:140px;
+}
+
+/* TITULOS */
+h1{
+  text-align:center;
+  font-size:22px;
+  margin:10px 0 5px;
+  font-weight:700;
+}
+.sub{
+  text-align:center;
+  font-size:14px;
+  color:#d1d5db;
+}
+
+/* CARD */
+.card{
+  background:#374151;
+  border-radius:18px;
+  padding:16px;
+  margin-top:20px;
+}
+
+/* LABELS */
+label{
   font-size:13px;
   font-weight:600;
-  color:var(--muted);
+  display:block;
+  margin-top:14px;
+  color:#e5e7eb;
 }
 
+/* INPUTS */
 select,input{
   width:100%;
   padding:14px;
+  margin-top:6px;
   border-radius:14px;
-  border:1px solid var(--border);
-  background:var(--input);
-  color:var(--text);
+  border:1px solid #4b5563;
   font-size:15px;
+  background:#111827;
+  color:#f9fafb;
 }
 
 select:focus,input:focus{
   outline:none;
-  border-color:var(--primary);
+  border-color:#2563eb;
 }
 
 /* INFO */
 .info{
-  margin:16px 0;
-  padding:14px;
-  border-radius:14px;
-  background:#020617;
-  border:1px solid var(--border);
-  font-size:13px;
-  color:var(--text);
-}
-
-/* PIX */
-.pix{
-  margin-bottom:18px;
-  padding:14px;
-  border-radius:14px;
-  background:rgba(34,197,94,.08);
-  border:1px dashed var(--secondary);
+  margin-top:16px;
+  background:#1f2937;
+  border-left:4px solid #22c55e;
+  padding:12px;
+  border-radius:12px;
+  text-align:center;
   font-size:14px;
-  color:var(--text);
 }
+.info b{color:#22c55e;}
 
-.pix strong{
-  color:var(--secondary);
-}
-
-/* BUTTON */
-button{
+/* BOTÃO */
+.btn{
   width:100%;
+  margin-top:18px;
   padding:16px;
-  border:none;
-  border-radius:16px;
-  background:linear-gradient(135deg,#2563eb,#1d4ed8);
-  color:#fff;
   font-size:16px;
   font-weight:700;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(135deg,#2563eb,#3b82f6);
+  color:#fff;
   cursor:pointer;
   transition:.3s;
 }
-
-button:hover{
+.btn:hover{
   transform:translateY(-1px);
   opacity:.95;
 }
 
+/* AVISO */
+.aviso{
+  margin-top:14px;
+  background:#fef3c7;
+  color:#111827;
+  border-radius:14px;
+  padding:12px;
+  font-size:13px;
+  text-align:center;
+}
+
+/* PIX */
+.pix-box{
+  margin-top:20px;
+  background:#1f2937;
+  border:2px dashed #22c55e;
+  border-radius:18px;
+  padding:16px;
+  text-align:center;
+}
+.pix{
+  font-size:17px;
+  font-weight:700;
+  color:#22c55e;
+  margin:10px 0;
+  word-break:break-all;
+}
+
+.hidden{display:none;}
+
 /* FOOTER */
 .footer{
   text-align:center;
-  margin-top:16px;
   font-size:11px;
-  color:#6b7280;
+  color:#d1d5db;
+  margin-top:18px;
 }
-</style>
-</head>
-
-<body>
-
-<div class="app">
-
-  <div class="header">
-    <img src="logo.png" alt="Logo">
-    <h1>Recargas com Desconto</h1>
-  </div>
-
-  <label>Operadora</label>
-  <select id="operadora">
-    <option value="">Selecione</option>
-    <option value="CLARO">CLARO</option>
-    <option value="TIM">TIM</option>
-  </select>
-
-  <label>Valor da Recarga</label>
-  <select id="valor">
-    <option value="">Escolha o valor</option>
-  </select>
-
-  <label>Número para recarga</label>
-  <input type="tel" id="numero" placeholder="DDD + número">
-
-  <div class="info">
-    ⏱ Prazo de recarga: até <strong>24 horas</strong><br>
-    💰 Caso não seja efetuada, o valor será <strong>devolvido</strong>.
-  </div>
-
-  <div class="pix">
-    Pagamento via <strong>PIX</strong><br>
-    Chave (CNPJ):<br>
-    <strong>58.306.326/0001-21</strong><br><br>
-    Envie o comprovante pelo WhatsApp
-  </div>
-
-  <button onclick="finalizar()">Ir para o WhatsApp</button>
-
-  <div class="footer">
-    © 2026 • Sistema Seguro de Recargas
-  </div>
-
-</div>
-
-<script>
-const valores={
-  CLARO:[
-    {r:20,p:16},{r:25,p:19},{r:30,p:21},
-    {r:40,p:24},{r:50,p:27},{r:100,p:65}
-  ],
-  TIM:[
-    {r:15,p:12},{r:20,p:16},{r:30,p:21},
-    {r:40,p:26},{r:50,p:29},{r:60,p:35},{r:100,p:65}
-  ]
-};
-
-operadora.onchange=()=>{
-  valor.innerHTML='<option value="">Escolha o valor</option>';
-  valores[operadora.value]?.forEach(v=>{
-    valor.innerHTML+=`
-      <option value="Recebe R$ ${v.r} | Paga R$ ${v.p}">
-        Recebe R$ ${v.r} | Paga R$ ${v.p}
-      </option>`;
-  });
-};
-
-function finalizar(){
-  if(!operadora.value || !valor.value || !numero.value){
-    alert("Preencha todos os campos");
-    return;
-  }
-
-  const msg=`📲 Operadora: ${operadora.value}
-📞 Número: ${numero.value}
-💰 ${valor.value}
-
-Pagamento via PIX
-Envio de comprovante`;
-
-  window.open(
-    `https://wa.me/5571984778390?text=${encodeURIComponent(msg)}`,
-    "_blank"
-  );
-}
-</script>
-
-</body>
-</html>
+  </style>
