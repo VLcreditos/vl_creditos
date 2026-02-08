@@ -24,16 +24,6 @@ h2{
   text-align:center;
   margin:12px 0;
 }
-.aviso{
-  background:#ffeb3b;
-  color:#000;
-  font-weight:bold;
-  text-align:center;
-  padding:12px;
-  border-radius:12px;
-  margin-bottom:15px;
-  font-size:14px;
-}
 label{
   margin-top:12px;
   display:block;
@@ -67,13 +57,23 @@ select,input{
   cursor:pointer;
 }
 .btn:hover{opacity:.9;}
+.aviso{
+  margin-top:12px;
+  background:#ffeb3b;
+  color:#000;
+  font-weight:bold;
+  text-align:center;
+  padding:10px;
+  border-radius:10px;
+  font-size:14px;
+}
 .pix-box{
   background:#000;
   border:2px dashed #25d366;
   padding:15px;
   border-radius:14px;
   text-align:center;
-  margin-top:15px;
+  margin-top:20px;
 }
 .pix{
   font-size:18px;
@@ -91,12 +91,6 @@ select,input{
 <div class="container">
 
   <h2>📲 Recarga com Desconto</h2>
-
-  <!-- AVISO APENAS ANTES DO PAGAMENTO -->
-  <div class="aviso">
-    ⏱️ Recarga em até <b>24 horas</b><br>
-    🔒 Se a recarga não for feita, o valor será <b>devolvido</b>
-  </div>
 
   <label>Operadora</label>
   <select id="operadora">
@@ -125,6 +119,12 @@ select,input{
   </div>
 
   <button class="btn" onclick="irParaPix()">Continuar para pagamento</button>
+
+  <!-- AVISO AGORA AQUI EMBAIXO DO BOTÃO -->
+  <div class="aviso">
+    ⏱️ Prazo de recarga: até <b>24 horas</b><br>
+    🔒 Caso a recarga não seja realizada, o valor será <b>devolvido</b>
+  </div>
 
   <!-- TELA PIX -->
   <div id="pixTela" class="hidden">
@@ -192,4 +192,4 @@ PIX: 58.306.326/0001-21`;
 </script>
 
 </body>
-                              </html>
+</html>
