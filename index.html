@@ -2,183 +2,229 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>VL Créditos - Recarga com Desconto</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recargas com Desconto</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+:root{
+  --bg:#0b1220;
+  --card:#111827;
+  --input:#020617;
+  --border:#1f2937;
+  --primary:#2563eb;
+  --secondary:#22c55e;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+}
+
+*{
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
+
 body{
   margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-  background:linear-gradient(180deg,#0b0000,#1a0000);
-  color:#fff;
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  padding:20px 12px;
 }
-.container{
+
+/* APP */
+.app{
+  background:var(--card);
   max-width:420px;
-  margin:25px auto;
-  background:#120000;
-  border-radius:18px;
-  padding:20px;
-  box-shadow:0 0 25px rgba(0,0,0,.6);
+  width:100%;
+  border-radius:22px;
+  padding:22px;
+  box-shadow:0 20px 50px rgba(0,0,0,.7);
+  animation:fade .5s ease;
 }
-.logo{
-  display:block;
-  margin:10px auto;
-  max-width:160px;
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
 }
-h2{text-align:center;}
+
+/* HEADER */
+.header{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.header img{
+  max-width:120px;
+  margin-bottom:10px;
+}
+
+.header h1{
+  font-size:20px;
+  margin:0;
+  color:var(--text);
+}
+
+/* FORM */
 label{
-  margin-top:12px;
   display:block;
-  font-weight:bold;
+  margin:14px 0 6px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
 }
+
 select,input{
   width:100%;
-  padding:12px;
-  margin-top:6px;
-  border-radius:10px;
-  border:none;
-  font-size:16px;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:var(--input);
+  color:var(--text);
+  font-size:15px;
 }
+
+select:focus,input:focus{
+  outline:none;
+  border-color:var(--primary);
+}
+
+/* INFO */
 .info{
-  background:#1f2933;
-  padding:12px;
-  border-radius:10px;
-  margin-top:15px;
-  text-align:center;
-}
-.btn{
-  width:100%;
-  margin-top:20px;
-  padding:15px;
-  font-size:18px;
-  font-weight:bold;
-  border:none;
+  margin:16px 0;
+  padding:14px;
   border-radius:14px;
-  background:#25d366;
-  color:#000;
+  background:#020617;
+  border:1px solid var(--border);
+  font-size:13px;
+  color:var(--text);
 }
-.aviso{
-  margin-top:12px;
-  background:#ffeb3b;
-  color:#000;
-  font-weight:bold;
-  text-align:center;
-  padding:10px;
-  border-radius:10px;
-  font-size:14px;
-}
-.pix-box{
-  background:#000;
-  border:2px dashed #25d366;
-  padding:15px;
-  border-radius:14px;
-  text-align:center;
-  margin-top:20px;
-}
+
+/* PIX */
 .pix{
-  font-size:18px;
-  color:#25d366;
-  font-weight:bold;
-  margin-top:10px;
+  margin-bottom:18px;
+  padding:14px;
+  border-radius:14px;
+  background:rgba(34,197,94,.08);
+  border:1px dashed var(--secondary);
+  font-size:14px;
+  color:var(--text);
 }
-.hidden{display:none;}
+
+.pix strong{
+  color:var(--secondary);
+}
+
+/* BUTTON */
+button{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:16px;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.3s;
+}
+
+button:hover{
+  transform:translateY(-1px);
+  opacity:.95;
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  margin-top:16px;
+  font-size:11px;
+  color:#6b7280;
+}
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="app">
 
-  <!-- LOGO -->
-  <img src="logo.png" alt="VL Créditos" class="logo">
-
-  <h2>📲 Recarga com Desconto</h2>
+  <div class="header">
+    <img src="logo.png" alt="Logo">
+    <h1>Recargas com Desconto</h1>
+  </div>
 
   <label>Operadora</label>
   <select id="operadora">
     <option value="">Selecione</option>
-    <option>Claro</option>
-    <option>TIM</option>
+    <option value="CLARO">CLARO</option>
+    <option value="TIM">TIM</option>
   </select>
 
-  <label>Número do celular</label>
+  <label>Valor da Recarga</label>
+  <select id="valor">
+    <option value="">Escolha o valor</option>
+  </select>
+
+  <label>Número para recarga</label>
   <input type="tel" id="numero" placeholder="DDD + número">
 
-  <label>Valor da recarga</label>
-  <select id="valor" onchange="mostrarValor()">
-    <option value="">Selecione</option>
-
-    <!-- CLARO / TIM -->
-    <option value="20">R$ 20</option>
-    <option value="25">R$ 25</option>
-    <option value="30">R$ 30</option>
-    <option value="40">R$ 40</option>
-    <option value="50">R$ 50</option>
-    <option value="60">R$ 60</option>
-    <option value="100">R$ 100</option>
-  </select>
-
-  <div class="info" id="info">Escolha a recarga</div>
-
-  <button class="btn" onclick="irPix()">Continuar para pagamento</button>
-
-  <div class="aviso">
-    ⏱️ Recarga em até <b>24 horas</b><br>
-    🔒 Caso não seja feita, o valor será <b>devolvido</b>
+  <div class="info">
+    ⏱ Prazo de recarga: até <strong>24 horas</strong><br>
+    💰 Caso não seja efetuada, o valor será <strong>devolvido</strong>.
   </div>
 
-  <div id="pix" class="hidden">
-    <div class="pix-box">
-      <h3>Pagamento via PIX</h3>
-      <p>Chave PIX (CNPJ)</p>
-      <div class="pix">58.306.326/0001-21</div>
-      <p>Envie o comprovante no WhatsApp</p>
-    </div>
+  <div class="pix">
+    Pagamento via <strong>PIX</strong><br>
+    Chave (CNPJ):<br>
+    <strong>58.306.326/0001-21</strong><br><br>
+    Envie o comprovante pelo WhatsApp
+  </div>
 
-    <button class="btn" onclick="enviarWhats()">Enviar comprovante</button>
+  <button onclick="finalizar()">Ir para o WhatsApp</button>
+
+  <div class="footer">
+    © 2026 • Sistema Seguro de Recargas
   </div>
 
 </div>
 
 <script>
-let paga = 0;
+const valores={
+  CLARO:[
+    {r:20,p:16},{r:25,p:19},{r:30,p:21},
+    {r:40,p:24},{r:50,p:27},{r:100,p:65}
+  ],
+  TIM:[
+    {r:15,p:12},{r:20,p:16},{r:30,p:21},
+    {r:40,p:26},{r:50,p:29},{r:60,p:35},{r:100,p:65}
+  ]
+};
 
-function mostrarValor(){
-  const v = document.getElementById("valor").value;
+operadora.onchange=()=>{
+  valor.innerHTML='<option value="">Escolha o valor</option>';
+  valores[operadora.value]?.forEach(v=>{
+    valor.innerHTML+=`
+      <option value="Recebe R$ ${v.r} | Paga R$ ${v.p}">
+        Recebe R$ ${v.r} | Paga R$ ${v.p}
+      </option>`;
+  });
+};
 
-  if(v==20) paga=16;
-  if(v==25) paga=19;
-  if(v==30) paga=21;
-  if(v==40) paga=24;
-  if(v==50) paga=27;
-  if(v==60) paga=35;
-  if(v==100) paga=65;
-
-  if(v){
-    document.getElementById("info").innerHTML =
-      `Você recebe <b>R$ ${v}</b><br>Você paga <b>R$ ${paga}</b>`;
-  }
-}
-
-function irPix(){
-  if(!operadora.value || !numero.value || !valor.value){
+function finalizar(){
+  if(!operadora.value || !valor.value || !numero.value){
     alert("Preencha todos os campos");
     return;
   }
-  pix.classList.remove("hidden");
-}
 
-function enviarWhats(){
-  const msg =
-`📲 PEDIDO DE RECARGA
-Operadora: ${operadora.value}
-Número: ${numero.value}
-Recarga: R$ ${valor.value}
-Valor pago: R$ ${paga}
-PIX: 58.306.326/0001-21`;
+  const msg=`📲 Operadora: ${operadora.value}
+📞 Número: ${numero.value}
+💰 ${valor.value}
+
+Pagamento via PIX
+Envio de comprovante`;
 
   window.open(
-    "https://wa.me/5571984778390?text="+encodeURIComponent(msg),
+    `https://wa.me/5571984778390?text=${encodeURIComponent(msg)}`,
     "_blank"
   );
 }
