@@ -20,9 +20,14 @@ body{
   padding:20px;
   box-shadow:0 0 25px rgba(0,0,0,.6);
 }
+.logo{
+  display:block;
+  margin:10px auto 5px;
+  max-width:160px;
+}
 h2{
   text-align:center;
-  margin:12px 0;
+  margin:10px 0;
 }
 label{
   margin-top:12px;
@@ -90,6 +95,9 @@ select,input{
 
 <div class="container">
 
+  <!-- LOGO AQUI -->
+  <img src="logo.png" alt="VL Créditos" class="logo">
+
   <h2>📲 Recarga com Desconto</h2>
 
   <label>Operadora</label>
@@ -120,13 +128,11 @@ select,input{
 
   <button class="btn" onclick="irParaPix()">Continuar para pagamento</button>
 
-  <!-- AVISO AGORA AQUI EMBAIXO DO BOTÃO -->
   <div class="aviso">
     ⏱️ Prazo de recarga: até <b>24 horas</b><br>
     🔒 Caso a recarga não seja realizada, o valor será <b>devolvido</b>
   </div>
 
-  <!-- TELA PIX -->
   <div id="pixTela" class="hidden">
     <div class="pix-box">
       <h3>Pagamento via PIX</h3>
