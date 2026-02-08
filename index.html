@@ -22,13 +22,10 @@ body{
 }
 .logo{
   display:block;
-  margin:10px auto 5px;
+  margin:10px auto;
   max-width:160px;
 }
-h2{
-  text-align:center;
-  margin:10px 0;
-}
+h2{text-align:center;}
 label{
   margin-top:12px;
   display:block;
@@ -59,9 +56,7 @@ select,input{
   border-radius:14px;
   background:#25d366;
   color:#000;
-  cursor:pointer;
 }
-.btn:hover{opacity:.9;}
 .aviso{
   margin-top:12px;
   background:#ffeb3b;
@@ -85,7 +80,6 @@ select,input{
   color:#25d366;
   font-weight:bold;
   margin-top:10px;
-  word-break:break-all;
 }
 .hidden{display:none;}
 </style>
@@ -95,7 +89,7 @@ select,input{
 
 <div class="container">
 
-  <!-- LOGO AQUI -->
+  <!-- LOGO -->
   <img src="logo.png" alt="VL Créditos" class="logo">
 
   <h2>📲 Recarga com Desconto</h2>
@@ -104,90 +98,83 @@ select,input{
   <select id="operadora">
     <option value="">Selecione</option>
     <option>Claro</option>
-    <option>Vivo</option>
     <option>TIM</option>
   </select>
 
   <label>Número do celular</label>
-  <input type="tel" id="numeroCliente" placeholder="DDD + número">
+  <input type="tel" id="numero" placeholder="DDD + número">
 
   <label>Valor da recarga</label>
-  <select id="recarga" onchange="mostrarValor()">
+  <select id="valor" onchange="mostrarValor()">
     <option value="">Selecione</option>
+
+    <!-- CLARO / TIM -->
     <option value="20">R$ 20</option>
     <option value="25">R$ 25</option>
     <option value="30">R$ 30</option>
     <option value="40">R$ 40</option>
     <option value="50">R$ 50</option>
+    <option value="60">R$ 60</option>
     <option value="100">R$ 100</option>
   </select>
 
-  <div class="info" id="info">
-    Escolha a recarga para ver o valor
-  </div>
+  <div class="info" id="info">Escolha a recarga</div>
 
-  <button class="btn" onclick="irParaPix()">Continuar para pagamento</button>
+  <button class="btn" onclick="irPix()">Continuar para pagamento</button>
 
   <div class="aviso">
-    ⏱️ Prazo de recarga: até <b>24 horas</b><br>
-    🔒 Caso a recarga não seja realizada, o valor será <b>devolvido</b>
+    ⏱️ Recarga em até <b>24 horas</b><br>
+    🔒 Caso não seja feita, o valor será <b>devolvido</b>
   </div>
 
-  <div id="pixTela" class="hidden">
+  <div id="pix" class="hidden">
     <div class="pix-box">
       <h3>Pagamento via PIX</h3>
       <p>Chave PIX (CNPJ)</p>
       <div class="pix">58.306.326/0001-21</div>
-      <p>Após pagar, envie o comprovante no WhatsApp</p>
+      <p>Envie o comprovante no WhatsApp</p>
     </div>
 
-    <button class="btn" onclick="enviarWhats()">Enviar comprovante no WhatsApp</button>
+    <button class="btn" onclick="enviarWhats()">Enviar comprovante</button>
   </div>
 
 </div>
 
 <script>
-let valorPaga = 0;
+let paga = 0;
 
 function mostrarValor(){
-  const v=document.getElementById("recarga").value;
-  if(v==20) valorPaga=16;
-  if(v==25) valorPaga=19;
-  if(v==30) valorPaga=21;
-  if(v==40) valorPaga=24;
-  if(v==50) valorPaga=27;
-  if(v==100) valorPaga=65;
+  const v = document.getElementById("valor").value;
+
+  if(v==20) paga=16;
+  if(v==25) paga=19;
+  if(v==30) paga=21;
+  if(v==40) paga=24;
+  if(v==50) paga=27;
+  if(v==60) paga=35;
+  if(v==100) paga=65;
 
   if(v){
     document.getElementById("info").innerHTML =
-    `Você recebe <b>R$ ${v}</b><br>
-     Você paga <b>R$ ${valorPaga}</b>`;
+      `Você recebe <b>R$ ${v}</b><br>Você paga <b>R$ ${paga}</b>`;
   }
 }
 
-function irParaPix(){
-  const op=document.getElementById("operadora").value;
-  const num=document.getElementById("numeroCliente").value;
-  const v=document.getElementById("recarga").value;
-
-  if(!op||!num||!v){
+function irPix(){
+  if(!operadora.value || !numero.value || !valor.value){
     alert("Preencha todos os campos");
     return;
   }
-  document.getElementById("pixTela").classList.remove("hidden");
+  pix.classList.remove("hidden");
 }
 
 function enviarWhats(){
-  const op=document.getElementById("operadora").value;
-  const num=document.getElementById("numeroCliente").value;
-  const v=document.getElementById("recarga").value;
-
   const msg =
 `📲 PEDIDO DE RECARGA
-Operadora: ${op}
-Número: ${num}
-Recarga: R$ ${v}
-Valor pago: R$ ${valorPaga}
+Operadora: ${operadora.value}
+Número: ${numero.value}
+Recarga: R$ ${valor.value}
+Valor pago: R$ ${paga}
 PIX: 58.306.326/0001-21`;
 
   window.open(
