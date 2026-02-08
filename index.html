@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VL Créditos - Recargas com Desconto</title>
+
+  <style>
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,#120000,#2b0000);
+      color:#fff;
+    }
+    header{
+      background:#b30000;
+      text-align:center;
+      padding:20px;
+    }
+    header h1{
+      margin:10px 0 0;
+      color:#ffeb3b;
+    }
+    .container{
+      max-width:900px;
+      margin:auto;
+      padding:15px;
+    }
+    .box{
+      background:rgba(0,0,0,0.5);
+      padding:20px;
+      border-radius:20px;
+      margin-bottom:20px;
+    }
+    label{
+      font-weight:bold;
+    }
+    select,input{
+      width:100%;
+      padding:10px;
+      border-radius:10px;
+      border:none;
+      margin-top:5px;
+    }
+    .resultado{
+      margin-top:15px;
+      background:#1c1c1c;
+      padding:15px;
+      border-radius:15px;
+      text-align:center;
+      font-size:1.1rem;
+    }
+    .resultado strong{
+      color:#4caf50;
+      font-size:1.3rem;
+    }
+    button{
+      width:100%;
+      margin-top:20px;
+      padding:15px;
+      border:none;
+      border-radius:30px;
+      background:#25d366;
+      color:#000;
+      font-size:1.2rem;
+      font-weight:bold;
+    }
+    footer{
+      text-align:center;
+      font-size:0.9rem;
+      opacity:0.8;
+      margin-bottom:20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>📲 VL Créditos</h1>
+  <p>Recargas com desconto • Atendimento rápido no WhatsApp</p>
+</header>
+
+<div class="container">
+
+  <div class="box">
+    <p style="text-align:center;color:#ffeb3b;font-weight:bold;">
+      ⏱️ Recarga feita em até 24 horas (prazo máximo)
+    </p>
+
+    <form onsubmit="enviarWhatsApp(event)">
+      <label>Operadora</label>
+      <select id="operadora" onchange="atualizarValores()" required>
+        <option value="">Selecione</option>
+        <option value="Claro">Claro</option>
+        <option value="Vivo">Vivo</option>
+        <option value="TIM">TIM</option>
+      </select>
+
+      <br><br>
+
+      <label>Valor da recarga</label>
+      <select id="valor" onchange="atualizarValores()" required>
+        <option value="">Selecione</option>
+      </select>
+
+      <br><br>
+
+      <label>Número que vai receber</label>
+      <input type="tel" id="numero" placeholder="DDD + número" required>
+
+      <div class="resultado" id="resultado">
+        Selecione a operadora e o valor
+      </div>
+
+      <button type="submit">💸 Pagar via Pix</button>
+    </form>
+  </div>
+
+  <div class="box">
+    <h3 style="text-align:center;">🔑 Pagamento via Pix</h3>
+    <p style="text-align:center;">Chave Pix (CNPJ)</p>
+    <p style="text-align:center;color:#4caf50;font-size:1.3rem;font-weight:bold;">
+      58.306.326/0001-21
+    </p>
+    <p style="text-align:center;">
+      Após pagar, envie o comprovante no WhatsApp.
+    </p>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 VL Créditos • Atendimento pelo WhatsApp
+</footer>
+
+<script>
+const valores = {
+  Claro: {
+    20:16, 25:19, 30:21, 40:24, 50:27, 100:65
+  },
+  Vivo: {
+    15:13, 20:15, 25:19, 30:21
+  },
+  TIM: {
+    15:12, 20:16, 30:21, 40:26, 50:29, 60:35, 100:65
+  }
+};
+
+function atualizarValores(){
+  const operadora = document.getElementById("operadora").value;
+  const valorSelect = document.getElementById("valor");
+  const resultado = document.getElementById("resultado");
+
+  valorSelect.innerHTML = "<option value=''>Selecione</option>";
+
+  if(!operadora) return;
+
+  for(let recebe in valores[operadora]){
+    const option = document.createElement("option");
+    option.value = recebe;
+    option.textContent = `Recebe R$ ${recebe}`;
+    valorSelect.appendChild(option);
+  }
+
+  resultado.innerHTML = "Selecione o valor da recarga";
+}
+
+document.getElementById("valor").addEventListener("change", () => {
+  const operadora = document.getElementById("operadora").value;
+  const recebe = document.getElementById("valor").value;
+  const resultado = document.getElementById("resultado");
+
+  if(recebe){
+    const paga = valores[operadora][recebe];
+    resultado.innerHTML = `
+      💰 Você recebe <strong>R$ ${recebe}</strong><br>
+      💸 Você paga <strong>R$ ${paga}</strong>
+    `;
+  }
+});
+
+function enviarWhatsApp(e){
+  e.preventDefault();
+
+  const operadora = document.getElementById("operadora").value;
+  const recebe = document.getElementById("valor").value;
+  const paga = valores[operadora][recebe];
+  const numero = document.getElementById("numero").value;
+
+  const msg =
+`Olá, quero fazer uma recarga!
+📲 Operadora: ${operadora}
+💰 Recebe: R$ ${recebe}
+💸 Paga: R$ ${paga}
+📱 Número: ${numero}
+Status: PENDENTE
+Pagamento via Pix`;
+
+  window.open(
+    "https://wa.me/5571984778390?text=" + encodeURIComponent(msg),
+    "_blank"
+  );
+}
+</script>
+
+</body>
+  </html>
