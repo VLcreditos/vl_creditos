@@ -1,95 +1,87 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>VL Créditos</title>
+  <title>VL Créditos - Recargas</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      margin: 0;
+      padding: 0;
       color: #fff;
     }
 
     .container {
-      max-width: 420px;
-      margin: 40px auto;
+      max-width: 400px;
+      margin: 30px auto;
       background: #111;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
     }
 
     .logo {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .logo img {
       width: 120px;
     }
 
-    h1 {
+    h2 {
       text-align: center;
-      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
       margin-bottom: 5px;
+      font-weight: bold;
     }
 
-    p {
-      text-align: center;
-      font-size: 14px;
-      color: #ccc;
-    }
-
-    select {
+    select, input {
       width: 100%;
-      padding: 14px;
-      border-radius: 10px;
+      padding: 12px;
+      border-radius: 8px;
       border: none;
-      margin-top: 20px;
       font-size: 16px;
     }
 
-    .box {
-      background: #1c1c1c;
-      margin-top: 20px;
-      padding: 16px;
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    .box span {
-      display: block;
-      margin-top: 8px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #00ff99;
+    .info {
+      margin-top: 15px;
+      background: #1f2933;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 15px;
     }
 
     .btn {
       margin-top: 20px;
       width: 100%;
-      padding: 14px;
-      background: #00c853;
-      color: #000;
-      font-size: 16px;
-      font-weight: bold;
+      padding: 15px;
+      background: #25d366;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
       cursor: pointer;
+      color: #000;
     }
 
     .btn:hover {
-      background: #00e676;
+      opacity: 0.9;
     }
 
     footer {
       text-align: center;
+      margin-top: 15px;
       font-size: 12px;
       color: #aaa;
-      margin-top: 20px;
     }
   </style>
 </head>
@@ -101,11 +93,22 @@
       <img src="logo.png" alt="VL Créditos">
     </div>
 
-    <h1>VL Créditos</h1>
-    <p>Escolha o valor da sua recarga</p>
+    <h2>Recarga de Celular</h2>
 
+    <label>Operadora</label>
+    <select id="operadora">
+      <option value="">Selecione</option>
+      <option>Claro</option>
+      <option>Vivo</option>
+      <option>TIM</option>
+    </select>
+
+    <label>Número do celular</label>
+    <input type="tel" id="numeroCliente" placeholder="DDD + número">
+
+    <label>Valor da recarga</label>
     <select id="recarga" onchange="calcular()">
-      <option value="">Selecione o valor</option>
+      <option value="">Selecione</option>
       <option value="20">R$ 20</option>
       <option value="25">R$ 25</option>
       <option value="30">R$ 30</option>
@@ -114,29 +117,42 @@
       <option value="100">R$ 100</option>
     </select>
 
-    <div class="box">
-      Você recebe:
-      <span id="recebe">R$ 0,00</span>
+    <div class="info" id="resultado">
+      Escolha uma recarga para ver o valor
     </div>
 
-    <div class="box">
-      Você paga:
-      <span id="paga">R$ 0,00</span>
-    </div>
-
-    <button class="btn">Finalizar pedido</button>
+    <button class="btn" onclick="finalizarPedido()">Finalizar no WhatsApp</button>
 
     <footer>
-      © 2026 VL Créditos
+      Pagamento via Pix • Atendimento rápido
     </footer>
   </div>
 
   <script>
-    function calcular() { function finalizarPedido() {
+    function calcular() {
+      const valor = document.getElementById("recarga").value;
+      let paga = 0;
+
+      if (valor == 20) paga = 16;
+      if (valor == 25) paga = 19;
+      if (valor == 30) paga = 21;
+      if (valor == 40) paga = 24;
+      if (valor == 50) paga = 27;
+      if (valor == 100) paga = 65;
+
+      if (valor) {
+        document.getElementById("resultado").innerHTML =
+          `Você recebe <b>R$ ${valor}</b><br>Você paga <b>R$ ${paga}</b>`;
+      }
+    }
+
+    function finalizarPedido() {
+      const operadora = document.getElementById("operadora").value;
+      const numeroCliente = document.getElementById("numeroCliente").value;
       const valor = document.getElementById("recarga").value;
 
-      if (!valor) {
-        alert("Selecione um valor de recarga");
+      if (!operadora || !numeroCliente || !valor) {
+        alert("Preencha todos os campos");
         return;
       }
 
@@ -149,30 +165,17 @@
       if (valor == 100) paga = 65;
 
       const mensagem =
-        `Olá! Quero uma recarga de R$ ${valor}, pagando R$ ${paga}.`;
+`📲 *Pedido de Recarga*
+Operadora: ${operadora}
+Número: ${numeroCliente}
+Recarga: R$ ${valor}
+Valor pago: R$ ${paga}`;
 
       const numeroWhatsApp = "5571984778390";
 
-      const link =
-        `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+      const link = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
 
       window.open(link, "_blank");
-    }
-      const valor = document.getElementById("recarga").value;
-      let paga = 0;
-
-      if (valor == 20) paga = 16;
-      if (valor == 25) paga = 19;
-      if (valor == 30) paga = 21;
-      if (valor == 40) paga = 24;
-      if (valor == 50) paga = 27;
-      if (valor == 100) paga = 65;
-
-      document.getElementById("recebe").innerText =
-        valor ? "R$ " + valor + ",00" : "R$ 0,00";
-
-      document.getElementById("paga").innerText =
-        paga ? "R$ " + paga + ",00" : "R$ 0,00";
     }
   </script>
 
