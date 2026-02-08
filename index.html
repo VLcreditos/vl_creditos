@@ -1,183 +1,198 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>VL Créditos - Recargas</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>VL Créditos - Recarga com Desconto</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      margin: 0;
-      padding: 0;
-      color: #fff;
-    }
-
-    .container {
-      max-width: 400px;
-      margin: 30px auto;
-      background: #111;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.6);
-    }
-
-    .logo {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    .logo img {
-      width: 120px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    select, input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-    }
-
-    .info {
-      margin-top: 15px;
-      background: #1f2933;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 15px;
-    }
-
-    .btn {
-      margin-top: 20px;
-      width: 100%;
-      padding: 15px;
-      background: #25d366;
-      border: none;
-      border-radius: 10px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      color: #000;
-    }
-
-    .btn:hover {
-      opacity: 0.9;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 12px;
-      color: #aaa;
-    }
-  </style>
+<style>
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:linear-gradient(180deg,#0a0a0a,#1a1a1a);
+  color:#fff;
+}
+.container{
+  max-width:420px;
+  margin:30px auto;
+  background:#111;
+  border-radius:15px;
+  padding:20px;
+  box-shadow:0 0 20px rgba(0,0,0,.6);
+}
+.logo{
+  text-align:center;
+}
+.logo img{
+  width:120px;
+}
+h2{
+  text-align:center;
+  margin:15px 0;
+}
+label{
+  margin-top:15px;
+  display:block;
+  font-weight:bold;
+}
+select,input{
+  width:100%;
+  padding:12px;
+  margin-top:5px;
+  border-radius:10px;
+  border:none;
+  font-size:16px;
+}
+.info{
+  background:#1f2933;
+  padding:12px;
+  border-radius:10px;
+  margin-top:15px;
+  text-align:center;
+}
+.btn{
+  width:100%;
+  margin-top:20px;
+  padding:15px;
+  font-size:18px;
+  font-weight:bold;
+  border:none;
+  border-radius:12px;
+  background:#25d366;
+  color:#000;
+  cursor:pointer;
+}
+.btn:hover{opacity:.9;}
+.pix-box{
+  background:#000;
+  border:2px dashed #25d366;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+  margin-top:15px;
+}
+.pix{
+  font-size:18px;
+  color:#25d366;
+  font-weight:bold;
+  margin-top:10px;
+  word-break:break-all;
+}
+footer{
+  text-align:center;
+  font-size:12px;
+  color:#aaa;
+  margin-top:15px;
+}
+.hidden{display:none;}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
-    <div class="logo">
-      <img src="logo.png" alt="VL Créditos">
-    </div>
+<div class="container">
 
-    <h2>Recarga de Celular</h2>
-
-    <label>Operadora</label>
-    <select id="operadora">
-      <option value="">Selecione</option>
-      <option>Claro</option>
-      <option>Vivo</option>
-      <option>TIM</option>
-    </select>
-
-    <label>Número do celular</label>
-    <input type="tel" id="numeroCliente" placeholder="DDD + número">
-
-    <label>Valor da recarga</label>
-    <select id="recarga" onchange="calcular()">
-      <option value="">Selecione</option>
-      <option value="20">R$ 20</option>
-      <option value="25">R$ 25</option>
-      <option value="30">R$ 30</option>
-      <option value="40">R$ 40</option>
-      <option value="50">R$ 50</option>
-      <option value="100">R$ 100</option>
-    </select>
-
-    <div class="info" id="resultado">
-      Escolha uma recarga para ver o valor
-    </div>
-
-    <button class="btn" onclick="finalizarPedido()">Finalizar no WhatsApp</button>
-
-    <footer>
-      Pagamento via Pix • Atendimento rápido
-    </footer>
+  <div class="logo">
+    <img src="logo.png">
   </div>
 
-  <script>
-    function calcular() {
-      const valor = document.getElementById("recarga").value;
-      let paga = 0;
+  <h2>Recarga com Desconto</h2>
 
-      if (valor == 20) paga = 16;
-      if (valor == 25) paga = 19;
-      if (valor == 30) paga = 21;
-      if (valor == 40) paga = 24;
-      if (valor == 50) paga = 27;
-      if (valor == 100) paga = 65;
+  <label>Operadora</label>
+  <select id="operadora">
+    <option value="">Selecione</option>
+    <option>Claro</option>
+    <option>Vivo</option>
+    <option>TIM</option>
+  </select>
 
-      if (valor) {
-        document.getElementById("resultado").innerHTML =
-          `Você recebe <b>R$ ${valor}</b><br>Você paga <b>R$ ${paga}</b>`;
-      }
-    }
+  <label>Número do celular</label>
+  <input type="tel" id="numeroCliente" placeholder="DDD + número">
 
-    function finalizarPedido() {
-      const operadora = document.getElementById("operadora").value;
-      const numeroCliente = document.getElementById("numeroCliente").value;
-      const valor = document.getElementById("recarga").value;
+  <label>Valor da recarga</label>
+  <select id="recarga" onchange="mostrarValor()">
+    <option value="">Selecione</option>
+    <option value="20">R$ 20</option>
+    <option value="25">R$ 25</option>
+    <option value="30">R$ 30</option>
+    <option value="40">R$ 40</option>
+    <option value="50">R$ 50</option>
+    <option value="100">R$ 100</option>
+  </select>
 
-      if (!operadora || !numeroCliente || !valor) {
-        alert("Preencha todos os campos");
-        return;
-      }
+  <div class="info" id="info">
+    Escolha a recarga para ver o valor
+  </div>
 
-      let paga = 0;
-      if (valor == 20) paga = 16;
-      if (valor == 25) paga = 19;
-      if (valor == 30) paga = 21;
-      if (valor == 40) paga = 24;
-      if (valor == 50) paga = 27;
-      if (valor == 100) paga = 65;
+  <button class="btn" onclick="irParaPix()">Continuar para pagamento</button>
 
-      const mensagem =
-`📲 *Pedido de Recarga*
-Operadora: ${operadora}
-Número: ${numeroCliente}
-Recarga: R$ ${valor}
-Valor pago: R$ ${paga}`;
+  <div id="pixTela" class="hidden">
 
-      const numeroWhatsApp = "5571984778390";
+    <div class="pix-box">
+      <h3>Pagamento via PIX</h3>
+      <p>Faça o pagamento para o CNPJ:</p>
+      <div class="pix">58.306.326/0001-21</div>
+      <p>Após pagar, envie o comprovante pelo WhatsApp</p>
+    </div>
 
-      const link = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+    <button class="btn" onclick="enviarWhats()">Enviar comprovante no WhatsApp</button>
 
-      window.open(link, "_blank");
-    }
-  </script>
+  </div>
+
+  <footer>
+    ⚡ Recarga rápida • Atendimento direto no WhatsApp
+  </footer>
+
+</div>
+
+<script>
+let valorPaga = 0;
+
+function mostrarValor(){
+  const v = document.getElementById("recarga").value;
+  if(v==20) valorPaga=16;
+  if(v==25) valorPaga=19;
+  if(v==30) valorPaga=21;
+  if(v==40) valorPaga=24;
+  if(v==50) valorPaga=27;
+  if(v==100) valorPaga=65;
+
+  if(v){
+    document.getElementById("info").innerHTML =
+    `Você recebe <b>R$ ${v}</b><br>Você paga <b>R$ ${valorPaga}</b>`;
+  }
+}
+
+function irParaPix(){
+  const op=document.getElementById("operadora").value;
+  const num=document.getElementById("numeroCliente").value;
+  const v=document.getElementById("recarga").value;
+
+  if(!op || !num || !v){
+    alert("Preencha todos os campos");
+    return;
+  }
+
+  document.getElementById("pixTela").classList.remove("hidden");
+}
+
+function enviarWhats(){
+  const op=document.getElementById("operadora").value;
+  const num=document.getElementById("numeroCliente").value;
+  const v=document.getElementById("recarga").value;
+
+  const msg =
+`📲 *COMPROVANTE DE RECARGA*
+Operadora: ${op}
+Número: ${num}
+Recarga: R$ ${v}
+Valor pago: R$ ${valorPaga}
+PIX: 58.306.326/0001-21`;
+
+  const wa="5571984778390";
+  window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,"_blank");
+}
+</script>
 
 </body>
-</html>
+    </html>
