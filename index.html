@@ -9,36 +9,40 @@
 body{
   margin:0;
   font-family:Arial, Helvetica, sans-serif;
-  background:linear-gradient(180deg,#0a0a0a,#1a1a1a);
+  background:linear-gradient(180deg,#0b0000,#1a0000);
   color:#fff;
 }
 .container{
   max-width:420px;
-  margin:30px auto;
-  background:#111;
-  border-radius:15px;
+  margin:25px auto;
+  background:#120000;
+  border-radius:18px;
   padding:20px;
-  box-shadow:0 0 20px rgba(0,0,0,.6);
-}
-.logo{
-  text-align:center;
-}
-.logo img{
-  width:120px;
+  box-shadow:0 0 25px rgba(0,0,0,.6);
 }
 h2{
   text-align:center;
-  margin:15px 0;
+  margin:12px 0;
+}
+.aviso{
+  background:#ffeb3b;
+  color:#000;
+  font-weight:bold;
+  text-align:center;
+  padding:12px;
+  border-radius:12px;
+  margin-bottom:15px;
+  font-size:14px;
 }
 label{
-  margin-top:15px;
+  margin-top:12px;
   display:block;
   font-weight:bold;
 }
 select,input{
   width:100%;
   padding:12px;
-  margin-top:5px;
+  margin-top:6px;
   border-radius:10px;
   border:none;
   font-size:16px;
@@ -57,7 +61,7 @@ select,input{
   font-size:18px;
   font-weight:bold;
   border:none;
-  border-radius:12px;
+  border-radius:14px;
   background:#25d366;
   color:#000;
   cursor:pointer;
@@ -67,7 +71,7 @@ select,input{
   background:#000;
   border:2px dashed #25d366;
   padding:15px;
-  border-radius:12px;
+  border-radius:14px;
   text-align:center;
   margin-top:15px;
 }
@@ -78,12 +82,6 @@ select,input{
   margin-top:10px;
   word-break:break-all;
 }
-footer{
-  text-align:center;
-  font-size:12px;
-  color:#aaa;
-  margin-top:15px;
-}
 .hidden{display:none;}
 </style>
 </head>
@@ -92,11 +90,13 @@ footer{
 
 <div class="container">
 
-  <div class="logo">
-    <img src="logo.png">
-  </div>
+  <h2>📲 Recarga com Desconto</h2>
 
-  <h2>Recarga com Desconto</h2>
+  <!-- AVISO APENAS ANTES DO PAGAMENTO -->
+  <div class="aviso">
+    ⏱️ Recarga em até <b>24 horas</b><br>
+    🔒 Se a recarga não for feita, o valor será <b>devolvido</b>
+  </div>
 
   <label>Operadora</label>
   <select id="operadora">
@@ -126,22 +126,17 @@ footer{
 
   <button class="btn" onclick="irParaPix()">Continuar para pagamento</button>
 
+  <!-- TELA PIX -->
   <div id="pixTela" class="hidden">
-
     <div class="pix-box">
       <h3>Pagamento via PIX</h3>
-      <p>Faça o pagamento para o CNPJ:</p>
+      <p>Chave PIX (CNPJ)</p>
       <div class="pix">58.306.326/0001-21</div>
-      <p>Após pagar, envie o comprovante pelo WhatsApp</p>
+      <p>Após pagar, envie o comprovante no WhatsApp</p>
     </div>
 
     <button class="btn" onclick="enviarWhats()">Enviar comprovante no WhatsApp</button>
-
   </div>
-
-  <footer>
-    ⚡ Recarga rápida • Atendimento direto no WhatsApp
-  </footer>
 
 </div>
 
@@ -149,7 +144,7 @@ footer{
 let valorPaga = 0;
 
 function mostrarValor(){
-  const v = document.getElementById("recarga").value;
+  const v=document.getElementById("recarga").value;
   if(v==20) valorPaga=16;
   if(v==25) valorPaga=19;
   if(v==30) valorPaga=21;
@@ -159,7 +154,8 @@ function mostrarValor(){
 
   if(v){
     document.getElementById("info").innerHTML =
-    `Você recebe <b>R$ ${v}</b><br>Você paga <b>R$ ${valorPaga}</b>`;
+    `Você recebe <b>R$ ${v}</b><br>
+     Você paga <b>R$ ${valorPaga}</b>`;
   }
 }
 
@@ -168,11 +164,10 @@ function irParaPix(){
   const num=document.getElementById("numeroCliente").value;
   const v=document.getElementById("recarga").value;
 
-  if(!op || !num || !v){
+  if(!op||!num||!v){
     alert("Preencha todos os campos");
     return;
   }
-
   document.getElementById("pixTela").classList.remove("hidden");
 }
 
@@ -182,17 +177,19 @@ function enviarWhats(){
   const v=document.getElementById("recarga").value;
 
   const msg =
-`📲 *COMPROVANTE DE RECARGA*
+`📲 PEDIDO DE RECARGA
 Operadora: ${op}
 Número: ${num}
 Recarga: R$ ${v}
 Valor pago: R$ ${valorPaga}
 PIX: 58.306.326/0001-21`;
 
-  const wa="5571984778390";
-  window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,"_blank");
+  window.open(
+    "https://wa.me/5571984778390?text="+encodeURIComponent(msg),
+    "_blank"
+  );
 }
 </script>
 
 </body>
-    </html>
+                              </html>
