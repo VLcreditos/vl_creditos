@@ -132,7 +132,32 @@
   </div>
 
   <script>
-    function calcular() {
+    function calcular() { function finalizarPedido() {
+      const valor = document.getElementById("recarga").value;
+
+      if (!valor) {
+        alert("Selecione um valor de recarga");
+        return;
+      }
+
+      let paga = 0;
+      if (valor == 20) paga = 16;
+      if (valor == 25) paga = 19;
+      if (valor == 30) paga = 21;
+      if (valor == 40) paga = 24;
+      if (valor == 50) paga = 27;
+      if (valor == 100) paga = 65;
+
+      const mensagem =
+        `Olá! Quero uma recarga de R$ ${valor}, pagando R$ ${paga}.`;
+
+      const numeroWhatsApp = "5571984778390";
+
+      const link =
+        `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+
+      window.open(link, "_blank");
+    }
       const valor = document.getElementById("recarga").value;
       let paga = 0;
 
