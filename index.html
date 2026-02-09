@@ -92,7 +92,7 @@ a{color:#25d366;text-decoration:none;}
 
 <div class="card">
 <label>Operadora</label>
-<select id="operadora" required>
+<select id="operadora" required onchange="atualizarValores()">
 <option value="">Selecione</option>
 <option value="Claro">Claro</option>
 <option value="TIM">TIM</option>
@@ -101,13 +101,8 @@ a{color:#25d366;text-decoration:none;}
 
 <div class="card">
 <label>Valor da recarga</label>
-<select id="valor" required>
-<option value="">Selecione</option>
-<option>R$ 20</option>
-<option>R$ 30</option>
-<option>R$ 40</option>
-<option>R$ 50</option>
-<option>R$ 100</option>
+<select id="valor" required onchange="mostrarInfo()">
+<option value="">Selecione a operadora</option>
 </select>
 </div>
 
@@ -116,12 +111,11 @@ a{color:#25d366;text-decoration:none;}
 <input type="tel" id="numero" placeholder="DDD + número" required>
 </div>
 
-<div class="info">
-⏱️ A recarga normalmente ocorre em minutos.<br>
-O prazo máximo informado é de até <b>24 horas</b> por segurança operacional.
+<div class="info" id="info">
+Selecione a recarga para ver os valores.
 </div>
 
-<!-- ACEITE OBRIGATÓRIO -->
+<!-- ACEITE -->
 <div style="margin-top:15px;font-size:14px;">
 <label style="cursor:pointer;">
 <input type="checkbox" id="aceite" onclick="liberarPagamento()">
@@ -135,8 +129,8 @@ O prazo máximo informado é de até <b>24 horas</b> por segurança operacional.
 </button>
 
 <div class="aviso">
-Caso a recarga não seja concluída dentro do prazo,
-o valor pago será <b>devolvido</b>.
+⏱️ Recarga normalmente em minutos.<br>
+Prazo máximo de até <b>24 horas</b>. Caso não seja concluída, o valor será <b>devolvido</b>.
 </div>
 
 </form>
@@ -148,33 +142,62 @@ o valor pago será <b>devolvido</b>.
 </div>
 
 <script>
+const tabela = {
+  Claro: {20:16,25:19,30:21,40:24,50:27,100:65},
+  TIM: {15:12,20:16,30:21,40:26,50:29,60:35,100:65}
+};
+
+let valorPago = 0;
+
+function atualizarValores(){
+  const op = operadora.value;
+  valor.innerHTML = '<option value="">Selecione</option>';
+  info.innerHTML = 'Selecione a recarga para ver os valores.';
+
+  if(!op) return;
+
+  for(let v in tabela[op]){
+    valor.innerHTML += `<option value="${v}">R$ ${v}</option>`;
+  }
+}
+
+function mostrarInfo(){
+  const v = valor.value;
+  if(!v) return;
+
+  valorPago = tabela[operadora.value][v];
+  info.innerHTML = `
+    💰 Você recebe <b>R$ ${v}</b><br>
+    💸 Você paga <b>R$ ${valorPago}</b>
+  `;
+}
+
 function liberarPagamento(){
-  const check=document.getElementById("aceite");
-  const btn=document.getElementById("btnPagar");
-  btn.disabled=!check.checked;
+  btnPagar.disabled = !aceite.checked;
 }
 
 function enviarWhats(e){
   e.preventDefault();
 
-  const op=document.getElementById("operadora").value;
-  const val=document.getElementById("valor").value;
-  const num=document.getElementById("numero").value;
   const cod="VL"+Math.floor(Math.random()*90000+10000);
 
   const msg=`Olá, desejo realizar uma recarga.
 
 Pedido: ${cod}
-Operadora: ${op}
-Valor: ${val}
-Número: ${num}
+Operadora: ${operadora.value}
+Número: ${numero.value}
+Recarga: R$ ${valor.value}
+Valor pago: R$ ${valorPago}
 
-Declaro que li e aceitei os Termos.
-Pagamento via Pix (comprovante em anexo).`;
+Pagamento via Pix (comprovante em anexo).
+Declaro que li e aceitei os Termos.`;
 
-  window.open("https://wa.me/5571984778390?text="+encodeURIComponent(msg),"_blank");
+  window.open(
+    "https://wa.me/5571984778390?text="+encodeURIComponent(msg),
+    "_blank"
+  );
 }
 </script>
 
 </body>
-   </html>
+</html>
