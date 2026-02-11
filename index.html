@@ -27,7 +27,7 @@ header img{max-width:160px;}
   box-shadow:0 20px 40px rgba(0,0,0,.6);
 }
 h1{text-align:center;font-size:22px;}
-
+label{font-size:14px;font-weight:bold;}
 select,input{
   width:100%;
   padding:12px;
@@ -36,19 +36,15 @@ select,input{
   margin-top:6px;
   font-size:15px;
 }
-
 .card{margin-top:15px;}
-
 .info{
   margin-top:12px;
   background:#0f1f14;
   border-left:4px solid #25d366;
-  padding:10px;
+  padding:12px;
   border-radius:10px;
   font-size:14px;
 }
-
-/* BOTÃO PREMIUM */
 .btn{
   width:100%;
   margin-top:18px;
@@ -57,81 +53,33 @@ select,input{
   font-weight:bold;
   border:none;
   border-radius:30px;
-  background:linear-gradient(45deg,#25d366,#1ebe5d);
+  background:#25d366;
   color:#000;
   cursor:pointer;
-  position:relative;
-  overflow:hidden;
-  transition:0.3s;
+  transition:.3s;
 }
-
-.btn:before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:-100%;
-  width:100%;
-  height:100%;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.5),transparent);
-  transition:0.6s;
-}
-
-.btn:hover:before{
-  left:100%;
-}
-
 .btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 20px rgba(37,211,102,.4);
+  transform:scale(1.03);
+  box-shadow:0 0 15px #25d366;
 }
-
 .btn:disabled{
-  opacity:.4;
+  opacity:.5;
   cursor:not-allowed;
 }
-
-/* TERMOS */
-.termosBox{
-  margin-top:18px;
-  background:#141414;
-  padding:14px;
-  border-radius:14px;
-  display:flex;
-  gap:10px;
-  border:1px solid #2b2b2b;
-}
-.termosBox.active{
-  border:1px solid #25d366;
-}
-.termosBox input{
-  accent-color:#25d366;
-  width:20px;
-  height:20px;
-}
-
-/* PIX BOX */
 .pixBox{
-  margin-top:18px;
-  background:#101010;
+  margin-top:20px;
+  background:#111;
   padding:15px;
   border-radius:15px;
-  border:1px solid #25d366;
   font-size:13px;
   word-break:break-all;
 }
-
-/* CONTADOR */
 .timer{
-  margin-top:12px;
-  padding:10px;
-  background:#2a0000;
-  border-radius:10px;
+  margin-top:10px;
+  font-size:14px;
+  color:#ffcc00;
   text-align:center;
-  font-weight:bold;
-  color:#ff4d4d;
-  font-size:16px;
 }
-
 .footer{
   text-align:center;
   font-size:12px;
@@ -145,12 +93,13 @@ a{color:#25d366;text-decoration:none;}
 <body>
 
 <header>
-  <img src="logo.png" alt="VL Créditos">
+  <img src="logo.png">
   <h1>VL Créditos</h1>
   <p>Recargas • Atendimento via WhatsApp</p>
 </header>
 
 <div class="container">
+
 <form onsubmit="gerarPix(event)">
 
 <div class="card">
@@ -171,64 +120,105 @@ a{color:#25d366;text-decoration:none;}
 
 <div class="card">
 <label>Número do celular</label>
-<input type="tel" id="numero" required>
+<input type="tel" id="numero" placeholder="DDD + número" required>
 </div>
 
 <div class="info" id="info">
 Selecione a recarga para ver os valores.
 </div>
 
-<div class="termosBox" id="termosBox">
-  <input type="checkbox" id="aceite" onclick="ativarTermos()">
-  <div>
-    Li e aceito os <a href="politica.html" target="_blank">Termos e Política</a><br>
-    <small>Prazo máximo de 24h.</small>
-  </div>
+<div style="margin-top:15px;font-size:14px;">
+<label style="cursor:pointer;">
+<input type="checkbox" id="aceite" onclick="liberarPagamento()">
+ Li e aceito os <a href="politica.html" target="_blank"><b>Termos e Política</b></a>
+</label>
 </div>
 
 <button class="btn" id="btnPagar" disabled>
-💸 Gerar Pix
+💸 Prosseguir para pagamento
 </button>
+
+</form>
 
 <div id="areaPix"></div>
 
 <div class="footer">
-© 2026 VL Créditos
+© 2026 VL Créditos • Serviço intermediado
 </div>
 
-</form>
 </div>
 
 <script>
 
-const chavePix="58306326000121";
-const nome="VL CREDITOS";
-const cidade="SALVADOR";
-
-const tabela={
-Claro:{20:16,25:19,30:21,40:24,50:27,100:65},
-TIM:{15:12,20:16,30:21,40:26,50:29,60:35,100:65}
+const tabela = {
+  Claro: {20:16,25:19,30:21,40:24,50:27,100:65},
+  TIM: {15:12,20:16,30:21,40:26,50:29,60:35,100:65}
 };
 
-let valorPago=0;
-let countdown;
+let valorPago = 0;
 
 function atualizarValores(){
-valor.innerHTML='<option value="">Selecione</option>';
-if(!operadora.value) return;
-for(let v in tabela[operadora.value]){
-valor.innerHTML+=`<option value="${v}">R$ ${v}</option>`;
-}
+  valor.innerHTML='<option value="">Selecione</option>';
+  info.innerHTML='Selecione a recarga para ver os valores.';
+  if(!operadora.value) return;
+  for(let v in tabela[operadora.value]){
+    valor.innerHTML+=`<option value="${v}">R$ ${v}</option>`;
+  }
 }
 
 function mostrarInfo(){
-valorPago=tabela[operadora.value][valor.value];
-info.innerHTML=`💰 Você recebe <b>R$ ${valor.value}</b><br>💸 Você paga <b>R$ ${valorPago}</b>`;
+  const v=valor.value;
+  if(!v) return;
+  valorPago=tabela[operadora.value][v];
+  info.innerHTML=`💰 Você recebe <b>R$ ${v}</b><br>💸 Você paga <b>R$ ${valorPago}</b>`;
 }
 
-function ativarTermos(){
-btnPagar.disabled=!aceite.checked;
-termosBox.classList.toggle("active");
+function liberarPagamento(){
+  btnPagar.disabled=!aceite.checked;
+}
+
+function montarCampo(id,valor){
+  return id+valor.length.toString().padStart(2,'0')+valor;
+}
+
+function gerarPix(e){
+e.preventDefault();
+
+const valorFormatado=Number(valorPago).toFixed(2);
+const txid="VL"+Math.floor(Math.random()*99999);
+
+let payload="";
+payload+=montarCampo("00","01");
+
+let merchant="";
+merchant+=montarCampo("00","BR.GOV.BCB.PIX");
+merchant+=montarCampo("01","58306326000121");
+payload+=montarCampo("26",merchant);
+
+payload+=montarCampo("52","0000");
+payload+=montarCampo("53","986");
+payload+=montarCampo("54",valorFormatado);
+payload+=montarCampo("58","BR");
+payload+=montarCampo("59","VL CREDITOS");
+payload+=montarCampo("60","SALVADOR");
+
+let adicional=montarCampo("05",txid);
+payload+=montarCampo("62",adicional);
+
+payload+="6304";
+payload+=crc16(payload);
+
+areaPix.innerHTML=`
+<div class="pixBox">
+<b>🔑 Pix Copia e Cola:</b><br><br>
+${payload}<br><br>
+<button class="btn" onclick="copiarPix('${payload}')">📋 Copiar Código</button>
+<button class="btn" onclick="irWhats()">📲 Enviar Comprovante</button>
+<div class="timer" id="timer">⏳ Tempo restante: 10:00</div>
+</div>
+`;
+
+iniciarContador(600);
 }
 
 function crc16(str){
@@ -236,67 +226,38 @@ let crc=0xFFFF;
 for(let c=0;c<str.length;c++){
 crc^=str.charCodeAt(c)<<8;
 for(let i=0;i<8;i++){
-crc=(crc&0x8000)?(crc<<1)^0x1021:crc<<1;
+if(crc&0x8000){crc=(crc<<1)^0x1021;}
+else{crc<<=1;}
 }
 }
-return(crc&0xFFFF).toString(16).toUpperCase().padStart(4,'0');
+crc&=0xFFFF;
+return crc.toString(16).toUpperCase().padStart(4,'0');
 }
 
-function gerarPix(e){
-e.preventDefault();
-
-const valorFormatado=valorPago.toFixed(2);
-
-let payload="000201"+"26"+"0014BR.GOV.BCB.PIX01"+chavePix.length.toString().padStart(2,'0')+chavePix+"52040000"+"5303986"+"54"+valorFormatado.length.toString().padStart(2,'0')+valorFormatado+"5802BR"+"59"+nome.length.toString().padStart(2,'0')+nome+"60"+cidade.length.toString().padStart(2,'0')+cidade+"62070503***6304";
-payload+=crc16(payload);
-
-areaPix.innerHTML=`
-<div class="pixBox">
-<b>🔑 Pix Copia e Cola:</b><br><br>
-${payload}<br><br>
-
-<button class="btn" onclick="copiarPix('${payload}')">📋 Copiar Código</button>
-<button class="btn" onclick="irWhats()">📲 Enviar Comprovante</button>
-
-<div class="timer" id="timer">
-⏳ Tempo restante: 10:00
-</div>
-
-</div>
-`;
-
-iniciarContador(600);
-}
-
-function copiarPix(c){
-navigator.clipboard.writeText(c);
-alert("Pix copiado!");
+function copiarPix(codigo){
+navigator.clipboard.writeText(codigo);
+alert("Código Pix copiado!");
 }
 
 function irWhats(){
-const msg=`Olá, fiz o pagamento.
-
-Operadora: ${operadora.value}
+const msg=`Olá, já realizei o pagamento via Pix.
 Número: ${numero.value}
-Valor: R$ ${valor.value}
-Pago: R$ ${valorPago}`;
-
+Recarga: R$ ${valor.value}
+Valor pago: R$ ${valorPago}`;
 window.open("https://wa.me/5571984778390?text="+encodeURIComponent(msg),"_blank");
 }
 
 function iniciarContador(segundos){
-clearInterval(countdown);
 let tempo=segundos;
-
-countdown=setInterval(()=>{
+const el=document.getElementById("timer");
+const intervalo=setInterval(()=>{
 let min=Math.floor(tempo/60);
-let sec=tempo%60;
-timer.innerHTML=`⏳ Tempo restante: ${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+let seg=tempo%60;
+el.innerHTML=`⏳ Tempo restante: ${min}:${seg.toString().padStart(2,'0')}`;
 tempo--;
-
 if(tempo<0){
-clearInterval(countdown);
-timer.innerHTML="⛔ Tempo expirado. Gere um novo Pix.";
+clearInterval(intervalo);
+el.innerHTML="❌ Tempo expirado. Gere um novo código.";
 }
 },1000);
 }
