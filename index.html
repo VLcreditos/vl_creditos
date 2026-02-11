@@ -14,10 +14,21 @@ body{
 }
 header{
   background:#111;
-  padding:20px;
+  padding:25px 20px;
   text-align:center;
 }
-header img{max-width:160px;}
+.logo{
+  max-width:140px;
+  margin-bottom:10px;
+}
+header h1{
+  margin:5px 0 0 0;
+  font-size:22px;
+}
+header p{
+  font-size:14px;
+  opacity:.8;
+}
 .container{
   max-width:420px;
   margin:20px auto;
@@ -26,8 +37,10 @@ header img{max-width:160px;}
   padding:20px;
   box-shadow:0 20px 40px rgba(0,0,0,.6);
 }
-h1{text-align:center;font-size:22px;}
-label{font-size:14px;font-weight:bold;}
+label{
+  font-size:14px;
+  font-weight:bold;
+}
 select,input{
   width:100%;
   padding:12px;
@@ -36,12 +49,14 @@ select,input{
   margin-top:6px;
   font-size:15px;
 }
-.card{margin-top:15px;}
+.card{
+  margin-top:15px;
+}
 .info{
   margin-top:12px;
   background:#0f1f14;
   border-left:4px solid #25d366;
-  padding:12px;
+  padding:10px;
   border-radius:10px;
   font-size:14px;
 }
@@ -56,7 +71,7 @@ select,input{
   background:#25d366;
   color:#000;
   cursor:pointer;
-  transition:.3s;
+  transition:0.3s;
 }
 .btn:hover{
   transform:scale(1.03);
@@ -65,19 +80,14 @@ select,input{
 .btn:disabled{
   opacity:.5;
   cursor:not-allowed;
+  box-shadow:none;
 }
-.pixBox{
-  margin-top:20px;
-  background:#111;
-  padding:15px;
-  border-radius:15px;
+.aviso{
+  margin-top:12px;
+  background:#2b2b2b;
+  padding:12px;
+  border-radius:10px;
   font-size:13px;
-  word-break:break-all;
-}
-.timer{
-  margin-top:10px;
-  font-size:14px;
-  color:#ffcc00;
   text-align:center;
 }
 .footer{
@@ -86,21 +96,25 @@ select,input{
   opacity:.7;
   margin-top:20px;
 }
-a{color:#25d366;text-decoration:none;}
+a{
+  color:#25d366;
+  text-decoration:none;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <img src="logo.png">
+  <!-- SUA LOGO -->
+  <img src="logo.png" alt="VL Créditos" class="logo">
   <h1>VL Créditos</h1>
   <p>Recargas • Atendimento via WhatsApp</p>
 </header>
 
 <div class="container">
 
-<form onsubmit="gerarPix(event)">
+<form onsubmit="enviarWhats(event)">
 
 <div class="card">
 <label>Operadora</label>
@@ -130,17 +144,21 @@ Selecione a recarga para ver os valores.
 <div style="margin-top:15px;font-size:14px;">
 <label style="cursor:pointer;">
 <input type="checkbox" id="aceite" onclick="liberarPagamento()">
- Li e aceito os <a href="politica.html" target="_blank"><b>Termos e Política</b></a>
+ Li e aceito os <b>Termos e Política</b>
 </label>
 </div>
 
-<button class="btn" id="btnPagar" disabled>
-💸 Prosseguir para pagamento
+<button class="btn" id="btnPagar" type="submit" disabled>
+📲 Enviar Pedido no WhatsApp
 </button>
 
-</form>
+<div class="aviso">
+⏱️ Recarga normalmente em minutos.<br>
+Prazo máximo de até <b>24 horas</b>.<br>
+Caso não seja concluída, o valor será <b>devolvido</b>.
+</div>
 
-<div id="areaPix"></div>
+</form>
 
 <div class="footer">
 © 2026 VL Créditos • Serviço intermediado
@@ -149,7 +167,6 @@ Selecione a recarga para ver os valores.
 </div>
 
 <script>
-
 const tabela = {
   Claro: {20:16,25:19,30:21,40:24,50:27,100:65},
   TIM: {15:12,20:16,30:21,40:26,50:29,60:35,100:65}
@@ -158,110 +175,53 @@ const tabela = {
 let valorPago = 0;
 
 function atualizarValores(){
-  valor.innerHTML='<option value="">Selecione</option>';
-  info.innerHTML='Selecione a recarga para ver os valores.';
-  if(!operadora.value) return;
-  for(let v in tabela[operadora.value]){
-    valor.innerHTML+=`<option value="${v}">R$ ${v}</option>`;
+  const op = operadora.value;
+  valor.innerHTML = '<option value="">Selecione</option>';
+  info.innerHTML = 'Selecione a recarga para ver os valores.';
+
+  if(!op) return;
+
+  for(let v in tabela[op]){
+    valor.innerHTML += `<option value="${v}">R$ ${v}</option>`;
   }
 }
 
 function mostrarInfo(){
-  const v=valor.value;
+  const v = valor.value;
   if(!v) return;
-  valorPago=tabela[operadora.value][v];
-  info.innerHTML=`💰 Você recebe <b>R$ ${v}</b><br>💸 Você paga <b>R$ ${valorPago}</b>`;
+
+  valorPago = tabela[operadora.value][v];
+  info.innerHTML = `
+    💰 Você recebe <b>R$ ${v}</b><br>
+    💸 Você paga <b>R$ ${valorPago}</b>
+  `;
 }
 
 function liberarPagamento(){
-  btnPagar.disabled=!aceite.checked;
+  btnPagar.disabled = !aceite.checked;
 }
 
-function montarCampo(id,valor){
-  return id+valor.length.toString().padStart(2,'0')+valor;
-}
+function enviarWhats(e){
+  e.preventDefault();
 
-function gerarPix(e){
-e.preventDefault();
+  const cod="VL"+Math.floor(Math.random()*90000+10000);
 
-const valorFormatado=Number(valorPago).toFixed(2);
-const txid="VL"+Math.floor(Math.random()*99999);
+  const msg=`Olá, desejo realizar uma recarga.
 
-let payload="";
-payload+=montarCampo("00","01");
-
-let merchant="";
-merchant+=montarCampo("00","BR.GOV.BCB.PIX");
-merchant+=montarCampo("01","58306326000121");
-payload+=montarCampo("26",merchant);
-
-payload+=montarCampo("52","0000");
-payload+=montarCampo("53","986");
-payload+=montarCampo("54",valorFormatado);
-payload+=montarCampo("58","BR");
-payload+=montarCampo("59","VL CREDITOS");
-payload+=montarCampo("60","SALVADOR");
-
-let adicional=montarCampo("05",txid);
-payload+=montarCampo("62",adicional);
-
-payload+="6304";
-payload+=crc16(payload);
-
-areaPix.innerHTML=`
-<div class="pixBox">
-<b>🔑 Pix Copia e Cola:</b><br><br>
-${payload}<br><br>
-<button class="btn" onclick="copiarPix('${payload}')">📋 Copiar Código</button>
-<button class="btn" onclick="irWhats()">📲 Enviar Comprovante</button>
-<div class="timer" id="timer">⏳ Tempo restante: 10:00</div>
-</div>
-`;
-
-iniciarContador(600);
-}
-
-function crc16(str){
-let crc=0xFFFF;
-for(let c=0;c<str.length;c++){
-crc^=str.charCodeAt(c)<<8;
-for(let i=0;i<8;i++){
-if(crc&0x8000){crc=(crc<<1)^0x1021;}
-else{crc<<=1;}
-}
-}
-crc&=0xFFFF;
-return crc.toString(16).toUpperCase().padStart(4,'0');
-}
-
-function copiarPix(codigo){
-navigator.clipboard.writeText(codigo);
-alert("Código Pix copiado!");
-}
-
-function irWhats(){
-const msg=`Olá, já realizei o pagamento via Pix.
+Pedido: ${cod}
+Operadora: ${operadora.value}
 Número: ${numero.value}
 Recarga: R$ ${valor.value}
-Valor pago: R$ ${valorPago}`;
-window.open("https://wa.me/5571984778390?text="+encodeURIComponent(msg),"_blank");
-}
+Valor pago: R$ ${valorPago}
 
-function iniciarContador(segundos){
-let tempo=segundos;
-const el=document.getElementById("timer");
-const intervalo=setInterval(()=>{
-let min=Math.floor(tempo/60);
-let seg=tempo%60;
-el.innerHTML=`⏳ Tempo restante: ${min}:${seg.toString().padStart(2,'0')}`;
-tempo--;
-if(tempo<0){
-clearInterval(intervalo);
-el.innerHTML="❌ Tempo expirado. Gere um novo código.";
-}
-},1000);
-}
+Pagamento via Pix (comprovante em anexo).
+Declaro que li e aceitei os Termos.`;
 
+  window.open(
+    "https://wa.me/5571984778390?text="+encodeURIComponent(msg),
+    "_blank"
+  );
+}
 </script>
 
 </body>
