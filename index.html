@@ -17,9 +17,7 @@ header{
   padding:20px;
   text-align:center;
 }
-header img{
-  max-width:160px;
-}
+header img{max-width:160px;}
 .container{
   max-width:420px;
   margin:20px auto;
@@ -30,7 +28,7 @@ header img{
 }
 h1{text-align:center;font-size:22px;}
 label{font-size:14px;font-weight:bold;}
-select,input{
+select,input,textarea{
   width:100%;
   padding:12px;
   border-radius:10px;
@@ -58,28 +56,28 @@ select,input{
   background:#25d366;
   color:#000;
   cursor:pointer;
-  transition:.2s;
+  transition:.3s;
 }
 .btn:hover{
-  transform:scale(1.05);
+  transform:scale(1.03);
+  box-shadow:0 0 20px #25d366;
 }
 .btn:disabled{
   opacity:.5;
   cursor:not-allowed;
 }
 .pix-area{
+  display:none;
   margin-top:20px;
   background:#111;
   padding:15px;
-  border-radius:12px;
-  display:none;
+  border-radius:15px;
 }
-textarea{
-  width:100%;
-  border-radius:10px;
-  border:none;
-  padding:10px;
-  font-size:12px;
+.timer{
+  text-align:center;
+  font-size:18px;
+  color:#25d366;
+  margin-top:10px;
 }
 .footer{
   text-align:center;
@@ -87,6 +85,7 @@ textarea{
   opacity:.7;
   margin-top:20px;
 }
+a{color:#25d366;text-decoration:none;}
 </style>
 </head>
 
@@ -95,7 +94,7 @@ textarea{
 <header>
   <img src="logo.png" alt="VL Créditos">
   <h1>VL Créditos</h1>
-  <p>Recargas com desconto</p>
+  <p>Recargas com desconto • Atendimento via WhatsApp</p>
 </header>
 
 <div class="container">
@@ -119,48 +118,52 @@ textarea{
 </div>
 
 <div class="card">
-<label>Número</label>
-<input type="tel" id="numero" required>
+<label>Número do celular</label>
+<input type="tel" id="numero" placeholder="DDD + número" required>
 </div>
 
 <div class="info" id="info">
-Selecione a recarga.
+Selecione a recarga para ver os valores.
 </div>
 
 <div style="margin-top:15px;">
 <label>
 <input type="checkbox" id="aceite" onclick="liberar()">
- Li e aceito os Termos
+ Li e aceito os <a href="politica.html" target="_blank"><b>Termos e Política</b></a>
 </label>
 </div>
 
 <button class="btn" id="btnPagar" disabled>
-💸 Gerar Pix Copia e Cola
+💸 Gerar Pix para pagamento
 </button>
 
 </form>
 
 <div class="pix-area" id="pixArea">
 
-<h3>🔑 Pix Copia e Cola</h3>
+<h3>💳 Pix Copia e Cola</h3>
 
-<textarea id="codigoPix" rows="5" readonly></textarea>
+<textarea id="codigoPix" rows="4" readonly></textarea>
 
-<button class="btn" onclick="copiarPix()">📋 Copiar Código Pix</button>
+<button class="btn" onclick="copiarPix()">📋 Copiar código Pix</button>
 
-<button class="btn" onclick="enviarWhats()">📲 Enviar Comprovante</button>
+<div class="timer" id="contador"></div>
+
+<button class="btn" onclick="enviarWhats()">📲 Enviar comprovante no WhatsApp</button>
 
 </div>
 
 <div class="footer">
-© 2026 VL Créditos
+© 2026 VL Créditos • Serviço intermediado
 </div>
 
 </div>
 
 <script>
 
-const chavePix = "58306326000121"; // CNPJ sem pontuação
+const chavePix = "58306326000121";
+const nomeRecebedor = "VL CREDITOS";
+const cidade = "SALVADOR";
 
 const tabela = {
   Claro: {20:16,25:19,30:21,40:24,50:27,100:65},
@@ -170,22 +173,20 @@ const tabela = {
 let valorPago = 0;
 
 function atualizarValores(){
-  const op = operadora.value;
   valor.innerHTML = '<option value="">Selecione</option>';
-  if(!op) return;
+  info.innerHTML = "Selecione a recarga para ver os valores.";
+  if(!operadora.value) return;
 
-  for(let v in tabela[op]){
+  for(let v in tabela[operadora.value]){
     valor.innerHTML += `<option value="${v}">R$ ${v}</option>`;
   }
 }
 
 function mostrarInfo(){
-  const v = valor.value;
-  if(!v) return;
-
-  valorPago = tabela[operadora.value][v];
+  if(!valor.value) return;
+  valorPago = tabela[operadora.value][valor.value];
   info.innerHTML = `
-  💰 Você recebe R$ ${v}<br>
+  💰 Você recebe R$ ${valor.value}<br>
   💸 Você paga R$ ${valorPago}
   `;
 }
@@ -199,36 +200,33 @@ function gerarPix(e){
 
   const valorFormatado = valorPago.toFixed(2);
 
-  let payload =
-    "000201" +
-    "26580014BR.GOV.BCB.PIX01" +
-    chavePix.length.toString().padStart(2,'0') +
-    chavePix +
-    "52040000" +
-    "5303986" +
-    "54" + valorFormatado.length.toString().padStart(2,'0') + valorFormatado +
-    "5802BR" +
-    "5909VL CREDIT" +
-    "6008SALVADOR" +
-    "62070503***" +
-    "6304";
+  let payload = "000201";
+  let gui = "0014BR.GOV.BCB.PIX";
+  let chave = "01" + chavePix.length.toString().padStart(2,'0') + chavePix;
+  let merchant = gui + chave;
 
+  payload += "26" + merchant.length.toString().padStart(2,'0') + merchant;
+  payload += "52040000";
+  payload += "5303986";
+  payload += "54" + valorFormatado.length.toString().padStart(2,'0') + valorFormatado;
+  payload += "5802BR";
+  payload += "59" + nomeRecebedor.length.toString().padStart(2,'0') + nomeRecebedor;
+  payload += "60" + cidade.length.toString().padStart(2,'0') + cidade;
+  payload += "62070503***";
+  payload += "6304";
   payload += crc16(payload);
 
   codigoPix.value = payload;
   pixArea.style.display = "block";
+  iniciarContador();
 }
 
-function crc16(str) {
+function crc16(str){
   let crc = 0xFFFF;
-  for (let i = 0; i < str.length; i++) {
-    crc ^= str.charCodeAt(i) << 8;
-    for (let j = 0; j < 8; j++) {
-      if ((crc & 0x8000) !== 0) {
-        crc = (crc << 1) ^ 0x1021;
-      } else {
-        crc <<= 1;
-      }
+  for (let c = 0; c < str.length; c++) {
+    crc ^= str.charCodeAt(c) << 8;
+    for (let i = 0; i < 8; i++) {
+      crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
     }
   }
   crc &= 0xFFFF;
@@ -241,9 +239,25 @@ function copiarPix(){
   alert("Código Pix copiado!");
 }
 
+function iniciarContador(){
+  let tempo = 300;
+  const el = document.getElementById("contador");
+  const intervalo = setInterval(()=>{
+    let min = Math.floor(tempo/60);
+    let seg = tempo%60;
+    el.innerHTML = "⏳ Expira em: " + min + ":" + (seg<10?"0":"") + seg;
+    tempo--;
+    if(tempo < 0){
+      clearInterval(intervalo);
+      el.innerHTML = "⚠️ Código expirado. Gere novamente.";
+    }
+  },1000);
+}
+
 function enviarWhats(){
   const msg=`Olá, desejo realizar uma recarga.
 
+Pedido:
 Operadora: ${operadora.value}
 Número: ${numero.value}
 Recarga: R$ ${valor.value}
@@ -253,12 +267,12 @@ Pagamento via Pix (comprovante em anexo).
 Declaro que li e aceitei os Termos.`;
 
   window.open(
-  "https://wa.me/5571984778390?text="+encodeURIComponent(msg),
-  "_blank"
+    "https://wa.me/5571984778390?text="+encodeURIComponent(msg),
+    "_blank"
   );
 }
 
 </script>
 
 </body>
-                        </html>
+</html>
