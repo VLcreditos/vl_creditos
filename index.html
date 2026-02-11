@@ -27,7 +27,7 @@ header img{max-width:160px;}
   box-shadow:0 20px 40px rgba(0,0,0,.6);
 }
 h1{text-align:center;font-size:22px;}
-label{font-size:14px;font-weight:bold;}
+
 select,input{
   width:100%;
   padding:12px;
@@ -36,7 +36,9 @@ select,input{
   margin-top:6px;
   font-size:15px;
 }
+
 .card{margin-top:15px;}
+
 .info{
   margin-top:12px;
   background:#0f1f14;
@@ -45,6 +47,8 @@ select,input{
   border-radius:10px;
   font-size:14px;
 }
+
+/* BOTÃO PREMIUM */
 .btn{
   width:100%;
   margin-top:18px;
@@ -53,21 +57,81 @@ select,input{
   font-weight:bold;
   border:none;
   border-radius:30px;
-  background:#25d366;
+  background:linear-gradient(45deg,#25d366,#1ebe5d);
   color:#000;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:0.3s;
 }
+
+.btn:before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.5),transparent);
+  transition:0.6s;
+}
+
+.btn:hover:before{
+  left:100%;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(37,211,102,.4);
+}
+
 .btn:disabled{
-  opacity:.5;
+  opacity:.4;
   cursor:not-allowed;
 }
-.aviso{
-  margin-top:12px;
-  background:#2b2b2b;
-  padding:12px;
-  border-radius:10px;
-  font-size:13px;
-  text-align:center;
+
+/* TERMOS */
+.termosBox{
+  margin-top:18px;
+  background:#141414;
+  padding:14px;
+  border-radius:14px;
+  display:flex;
+  gap:10px;
+  border:1px solid #2b2b2b;
 }
+.termosBox.active{
+  border:1px solid #25d366;
+}
+.termosBox input{
+  accent-color:#25d366;
+  width:20px;
+  height:20px;
+}
+
+/* PIX BOX */
+.pixBox{
+  margin-top:18px;
+  background:#101010;
+  padding:15px;
+  border-radius:15px;
+  border:1px solid #25d366;
+  font-size:13px;
+  word-break:break-all;
+}
+
+/* CONTADOR */
+.timer{
+  margin-top:12px;
+  padding:10px;
+  background:#2a0000;
+  border-radius:10px;
+  text-align:center;
+  font-weight:bold;
+  color:#ff4d4d;
+  font-size:16px;
+}
+
 .footer{
   text-align:center;
   font-size:12px;
@@ -87,8 +151,7 @@ a{color:#25d366;text-decoration:none;}
 </header>
 
 <div class="container">
-
-<form onsubmit="enviarWhats(event)">
+<form onsubmit="gerarPix(event)">
 
 <div class="card">
 <label>Operadora</label>
@@ -108,95 +171,136 @@ a{color:#25d366;text-decoration:none;}
 
 <div class="card">
 <label>Número do celular</label>
-<input type="tel" id="numero" placeholder="DDD + número" required>
+<input type="tel" id="numero" required>
 </div>
 
 <div class="info" id="info">
 Selecione a recarga para ver os valores.
 </div>
 
-<!-- ACEITE -->
-<div style="margin-top:15px;font-size:14px;">
-<label style="cursor:pointer;">
-<input type="checkbox" id="aceite" onclick="liberarPagamento()">
- Li e aceito os
- <a href="politica.html" target="_blank"><b>Termos e Política</b></a>
-</label>
+<div class="termosBox" id="termosBox">
+  <input type="checkbox" id="aceite" onclick="ativarTermos()">
+  <div>
+    Li e aceito os <a href="politica.html" target="_blank">Termos e Política</a><br>
+    <small>Prazo máximo de 24h.</small>
+  </div>
 </div>
 
-<button class="btn" id="btnPagar" type="submit" disabled>
-💸 Prosseguir para pagamento
+<button class="btn" id="btnPagar" disabled>
+💸 Gerar Pix
 </button>
 
-<div class="aviso">
-⏱️ Recarga normalmente em minutos.<br>
-Prazo máximo de até <b>24 horas</b>. Caso não seja concluída, o valor será <b>devolvido</b>.
+<div id="areaPix"></div>
+
+<div class="footer">
+© 2026 VL Créditos
 </div>
 
 </form>
-
-<div class="footer">
-© 2026 VL Créditos • Serviço intermediado
-</div>
-
 </div>
 
 <script>
-const tabela = {
-  Claro: {20:16,25:19,30:21,40:24,50:27,100:65},
-  TIM: {15:12,20:16,30:21,40:26,50:29,60:35,100:65}
+
+const chavePix="58306326000121";
+const nome="VL CREDITOS";
+const cidade="SALVADOR";
+
+const tabela={
+Claro:{20:16,25:19,30:21,40:24,50:27,100:65},
+TIM:{15:12,20:16,30:21,40:26,50:29,60:35,100:65}
 };
 
-let valorPago = 0;
+let valorPago=0;
+let countdown;
 
 function atualizarValores(){
-  const op = operadora.value;
-  valor.innerHTML = '<option value="">Selecione</option>';
-  info.innerHTML = 'Selecione a recarga para ver os valores.';
-
-  if(!op) return;
-
-  for(let v in tabela[op]){
-    valor.innerHTML += `<option value="${v}">R$ ${v}</option>`;
-  }
+valor.innerHTML='<option value="">Selecione</option>';
+if(!operadora.value) return;
+for(let v in tabela[operadora.value]){
+valor.innerHTML+=`<option value="${v}">R$ ${v}</option>`;
+}
 }
 
 function mostrarInfo(){
-  const v = valor.value;
-  if(!v) return;
-
-  valorPago = tabela[operadora.value][v];
-  info.innerHTML = `
-    💰 Você recebe <b>R$ ${v}</b><br>
-    💸 Você paga <b>R$ ${valorPago}</b>
-  `;
+valorPago=tabela[operadora.value][valor.value];
+info.innerHTML=`💰 Você recebe <b>R$ ${valor.value}</b><br>💸 Você paga <b>R$ ${valorPago}</b>`;
 }
 
-function liberarPagamento(){
-  btnPagar.disabled = !aceite.checked;
+function ativarTermos(){
+btnPagar.disabled=!aceite.checked;
+termosBox.classList.toggle("active");
 }
 
-function enviarWhats(e){
-  e.preventDefault();
+function crc16(str){
+let crc=0xFFFF;
+for(let c=0;c<str.length;c++){
+crc^=str.charCodeAt(c)<<8;
+for(let i=0;i<8;i++){
+crc=(crc&0x8000)?(crc<<1)^0x1021:crc<<1;
+}
+}
+return(crc&0xFFFF).toString(16).toUpperCase().padStart(4,'0');
+}
 
-  const cod="VL"+Math.floor(Math.random()*90000+10000);
+function gerarPix(e){
+e.preventDefault();
 
-  const msg=`Olá, desejo realizar uma recarga.
+const valorFormatado=valorPago.toFixed(2);
 
-Pedido: ${cod}
+let payload="000201"+"26"+"0014BR.GOV.BCB.PIX01"+chavePix.length.toString().padStart(2,'0')+chavePix+"52040000"+"5303986"+"54"+valorFormatado.length.toString().padStart(2,'0')+valorFormatado+"5802BR"+"59"+nome.length.toString().padStart(2,'0')+nome+"60"+cidade.length.toString().padStart(2,'0')+cidade+"62070503***6304";
+payload+=crc16(payload);
+
+areaPix.innerHTML=`
+<div class="pixBox">
+<b>🔑 Pix Copia e Cola:</b><br><br>
+${payload}<br><br>
+
+<button class="btn" onclick="copiarPix('${payload}')">📋 Copiar Código</button>
+<button class="btn" onclick="irWhats()">📲 Enviar Comprovante</button>
+
+<div class="timer" id="timer">
+⏳ Tempo restante: 10:00
+</div>
+
+</div>
+`;
+
+iniciarContador(600);
+}
+
+function copiarPix(c){
+navigator.clipboard.writeText(c);
+alert("Pix copiado!");
+}
+
+function irWhats(){
+const msg=`Olá, fiz o pagamento.
+
 Operadora: ${operadora.value}
 Número: ${numero.value}
-Recarga: R$ ${valor.value}
-Valor pago: R$ ${valorPago}
+Valor: R$ ${valor.value}
+Pago: R$ ${valorPago}`;
 
-Pagamento via Pix (comprovante em anexo).
-Declaro que li e aceitei os Termos.`;
-
-  window.open(
-    "https://wa.me/5571984778390?text="+encodeURIComponent(msg),
-    "_blank"
-  );
+window.open("https://wa.me/5571984778390?text="+encodeURIComponent(msg),"_blank");
 }
+
+function iniciarContador(segundos){
+clearInterval(countdown);
+let tempo=segundos;
+
+countdown=setInterval(()=>{
+let min=Math.floor(tempo/60);
+let sec=tempo%60;
+timer.innerHTML=`⏳ Tempo restante: ${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+tempo--;
+
+if(tempo<0){
+clearInterval(countdown);
+timer.innerHTML="⛔ Tempo expirado. Gere um novo Pix.";
+}
+},1000);
+}
+
 </script>
 
 </body>
